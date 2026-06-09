@@ -19,41 +19,24 @@ double calculate_repair_total(double base_cost, double discount) {
     return base_cost - discount;
 }
 
-void test_user_roles() {
+int main() {
+    std::cout << "Running automatic tests..." << std::endl;
+
     bool r1 = validate_user_role("admin");
     bool r2 = validate_user_role("mechanic");
     bool r3 = validate_user_role("guest");
-    assert(r1 == true);
-    assert(r2 == true);
-    assert(r3 == false);
-    std::cout << "Log user roles: " << r1 << r2 << r3 << std::endl;
-}
+    assert(r1 && r2 && !r3);
 
-void test_plate_numbers() {
     bool p1 = is_plate_number_valid("A123AA");
     bool p2 = is_plate_number_valid("");
     bool p3 = is_plate_number_valid("VERY_LONG_PLATE");
-    assert(p1 == true);
-    assert(p2 == false);
-    assert(p3 == false);
-    std::cout << "Log plates: " << p1 << p2 << p3 << std::endl;
-}
+    assert(p1 && !p2 && !p3);
 
-void test_repair_costs() {
     double c1 = calculate_repair_total(1000.0, 100.0);
     double c2 = calculate_repair_total(500.0, 0.0);
     double c3 = calculate_repair_total(-50.0, 10.0);
-    assert(c1 == 900.0);
-    assert(c2 == 500.0);
-    assert(c3 == 0.0);
-    std::cout << "Log costs: " << c1 << " " << c2 << " " << c3 << std::endl;
-}
+    assert(c1 == 900.0 && c2 == 500.0 && c3 == 0.0);
 
-int main() {
-    std::cout << "Starting tests..." << std::endl;
-    test_user_roles();
-    test_plate_numbers();
-    test_repair_costs();
-    std::cout << "All tests passed successfully!" << std::endl;
+    std::cout << "All assertions passed!" << std::endl;
     return 0;
 }

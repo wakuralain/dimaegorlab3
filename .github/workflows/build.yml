@@ -1,0 +1,27 @@
+name: C++ KIS Build
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Create Directories
+      run: |
+        mkdir -p bin
+        mkdir -p build
+
+    - name: Compile Application
+      run: |
+        g++ -I./includes src/auth.cpp src/db.cpp src/main.cpp -o bin/kis_app
+
+    - name: Verify Executable
+      run: |
+        test -f bin/kis_app

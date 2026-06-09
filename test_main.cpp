@@ -8,35 +8,30 @@ bool validate_user_role(const std::string& role) {
     return false;
 }
 
-bool is_plate_number_valid(const std::string& plate) {
+bool is_plate_valid(const std::string& plate) {
     if (plate.empty()) return false;
     if (plate.length() > 10) return false;
     return true;
 }
 
-double calculate_repair_total(double base_cost, double discount) {
-    if (base_cost < 0 || discount < 0) return 0.0;
-    return base_cost - discount;
+double calc_total(double base, double discount) {
+    if (base < 0) return 0.0;
+    return base - discount;
 }
 
 int main() {
-    std::cout << "Running automatic tests..." << std::endl;
+    assert(validate_user_role("admin") == true);
+    assert(validate_user_role("mechanic") == true);
+    assert(validate_user_role("guest") == false);
 
-    bool r1 = validate_user_role("admin");
-    bool r2 = validate_user_role("mechanic");
-    bool r3 = validate_user_role("guest");
-    assert(r1 && r2 && !r3);
+    assert(is_plate_valid("A123AA") == true);
+    assert(is_plate_valid("") == false);
+    assert(is_plate_valid("VERYLONGPLATE") == false);
 
-    bool p1 = is_plate_number_valid("A123AA");
-    bool p2 = is_plate_number_valid("");
-    bool p3 = is_plate_number_valid("VERY_LONG_PLATE");
-    assert(p1 && !p2 && !p3);
+    assert(calc_total(100.0, 10.0) == 90.0);
+    assert(calc_total(50.0, 0.0) == 50.0);
+    assert(calc_total(-10.0, 5.0) == 0.0);
 
-    double c1 = calculate_repair_total(1000.0, 100.0);
-    double c2 = calculate_repair_total(500.0, 0.0);
-    double c3 = calculate_repair_total(-50.0, 10.0);
-    assert(c1 == 900.0 && c2 == 500.0 && c3 == 0.0);
-
-    std::cout << "All assertions passed!" << std::endl;
+    std::cout << "All tests passed successfully!" << std::endl;
     return 0;
 }

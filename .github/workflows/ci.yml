@@ -14,25 +14,26 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install lcov (for coverage report)
+    - name: Install lcov
       run: |
         sudo apt-get update
         sudo apt-get install -y lcov
 
-    - name: Compile Code and Tests with Coverage flags
+    - name: Compile
       run: |
-        g++ -O0 --coverage test_main.cpp -o test_runner
+        g++ -fprofile-arcs -ftest-coverage test_main.cpp -o test_runner
 
     - name: Run Tests
       run: |
         ./test_runner
 
-    - name: Generate Coverage Report
+    - name: Generate Coverage
       run: |
-        lcov --capture --directory . --output-file coverage.info
-        lcov --remove coverage.info '/usr/*' --output-file coverage.info # убираем системные библиотеки
-        genhtml coverage.info --output-directory out
-        
+        lcov --capture --initial --directory . --output-file base.info
+        lcov --capture --directory . --output-file test.info
+        lcov --add-tracefile base.info --add-tracefile test.info --output-file total.info
+        lcov --remove total.info '/usr/*' --output-file coverage.info
+
     - name: Display Coverage in Logs
       run: |
         lcov --list coverage.info
